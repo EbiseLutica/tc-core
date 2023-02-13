@@ -4,10 +4,8 @@ import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.TCCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
-import work.xeltica.craft.core.modules.hint.Hint
-import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.utils.Ticks
 
 /**
@@ -30,11 +28,10 @@ object CountdownModule : ModuleBase() {
             it.playSound(it.location, Sound.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 1f, 0.6f)
         }
         countDown(count - 1, members, onFinish, goMessage)
-        issuer?.let { HintModule.achieve(it, Hint.COUNTDOWN) }
     }
 
     private fun countDown(count: Int, members: Set<Player>, onFinish: (() -> Unit)?, goMessage: String?) {
-        Bukkit.getScheduler().runTaskLater(XCorePlugin.instance, Runnable {
+        Bukkit.getScheduler().runTaskLater(TCCorePlugin.instance, Runnable {
             if (count > 0) {
                 members.forEach {
                     it.sendTitle(count.toString(), "", 0, 20, 0)

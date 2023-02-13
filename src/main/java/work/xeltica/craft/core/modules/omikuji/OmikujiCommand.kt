@@ -9,10 +9,8 @@ import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
-import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.TCCorePlugin
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
-import work.xeltica.craft.core.modules.hint.Hint
-import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.utils.Ticks
 
 class OmikujiCommand : CommandPlayerOnlyBase() {
@@ -50,7 +48,6 @@ class OmikujiCommand : CommandPlayerOnlyBase() {
                     OmikujiScore.TOKUDAIKICHI -> {
                         player.addPotionEffect(PotionEffect(PotionEffectType.LUCK, Ticks.from(20, 0.0), 1))
                         player.playSound(player.location, Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 1f, 1.6f)
-                        HintModule.achieve(player, Hint.OMIKUJI_TOKUDAIKICHI)
                     }
 
                     OmikujiScore.DAIKICHI -> {
@@ -63,7 +60,6 @@ class OmikujiCommand : CommandPlayerOnlyBase() {
                         player.addPotionEffect(PotionEffect(PotionEffectType.POISON, Ticks.from(10.0), 2))
                         player.addPotionEffect(PotionEffect(PotionEffectType.UNLUCK, Ticks.from(20, 0.0), 1))
                         player.playSound(player.location, Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.PLAYERS, 1f, 0.5f)
-                        HintModule.achieve(player, Hint.OMIKUJI_DAIKYOU)
                     }
 
                     OmikujiScore.KYOU -> {
@@ -79,7 +75,7 @@ class OmikujiCommand : CommandPlayerOnlyBase() {
                     }
                 }
             }
-        }.runTaskLater(XCorePlugin.instance, Ticks.from(3.0).toLong())
+        }.runTaskLater(TCCorePlugin.instance, Ticks.from(3.0).toLong())
         return true
     }
 

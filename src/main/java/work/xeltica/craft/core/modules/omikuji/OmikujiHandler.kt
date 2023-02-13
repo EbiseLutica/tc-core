@@ -7,7 +7,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
-import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.TCCorePlugin
 import work.xeltica.craft.core.api.events.NewMorningEvent
 
 class OmikujiHandler : Listener {
@@ -33,6 +33,6 @@ class OmikujiHandler : Listener {
             override fun run() {
                 inventory.setItemInMainHand(heldItem)
             }
-        }.runTaskLater(XCorePlugin.instance, 1)
+        }.runTaskLater(TCCorePlugin.instance, 1)
     }
 }

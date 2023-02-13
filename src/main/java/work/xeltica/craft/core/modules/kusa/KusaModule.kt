@@ -5,10 +5,8 @@ import org.bukkit.Material
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
-import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.TCCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
-import work.xeltica.craft.core.modules.hint.Hint
-import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.utils.Ticks
 import java.util.UUID
 
@@ -40,9 +38,8 @@ object KusaModule : ModuleBase() {
                         block.applyBoneMeal(BlockFace.UP)
                     }
                     kusaTimeMap[id] = nowTime
-                    HintModule.achieve(player, Hint.KUSA)
                 }
-            }.runTask(XCorePlugin.instance)
+            }.runTask(TCCorePlugin.instance)
         }
     }
 }

@@ -8,7 +8,7 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Axolotl
 import org.bukkit.entity.Mob
 import org.bukkit.inventory.ItemStack
-import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.TCCorePlugin
 import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
 import java.util.Objects
@@ -23,7 +23,7 @@ object MobBallModule : ModuleBase() {
     lateinit var difficulties: Array<Double>
 
     override fun onEnable() {
-        XCorePlugin.instance.saveResource("mobCaptureDifficulty.yml", false)
+        TCCorePlugin.instance.saveResource("mobCaptureDifficulty.yml", false)
         reload()
         registerCommand("givemobball", CommandGiveMobBall())
         registerHandler(MobBallHandler())

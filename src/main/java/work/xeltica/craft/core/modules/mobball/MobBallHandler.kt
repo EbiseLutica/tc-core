@@ -29,7 +29,6 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockDispenseEvent
 import org.bukkit.event.entity.CreatureSpawnEvent
-import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.entity.ProjectileHitEvent
 import org.bukkit.event.player.PlayerEggThrowEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
@@ -37,12 +36,9 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
-import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.TCCorePlugin
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.gui.Gui
-import work.xeltica.craft.core.hooks.CitizensHook.isCitizensNpc
-import work.xeltica.craft.core.modules.hint.Hint
-import work.xeltica.craft.core.modules.hint.HintModule
 import java.util.Random
 import java.util.UUID
 
@@ -95,12 +91,6 @@ class MobBallHandler : Listener {
             return
         }
 
-        // Citizens NPCであればボールを返却する
-        if (target.isCitizensNpc()) {
-            dropEgg(egg, player)
-            return
-        }
-
         val ownerId = if (target is Tameable) target.ownerUniqueId else null
         // 飼育可能かつ飼育済みかつ親IDがあり親が自分でなければはボールを返却する
         if (ownerId is UUID && ownerId != player.uniqueId) {
@@ -108,7 +98,7 @@ class MobBallHandler : Listener {
             return
         }
 
-        if (target.persistentDataContainer.has(NamespacedKey(XCorePlugin.instance, "isCaptured"), PersistentDataType.INTEGER)) {
+        if (target.persistentDataContainer.has(NamespacedKey(TCCorePlugin.instance, "isCaptured"), PersistentDataType.INTEGER)) {
             dropEgg(egg, player, "そのモブは既に捕獲されています。")
             return
         }
@@ -151,7 +141,6 @@ class MobBallHandler : Listener {
                         player.sendMessage("${ChatColor.GREEN}${ChatColor.BOLD}おめでとう！${ChatColor.RESET}${eggNbt.getString("mobCase")}を捕まえた！")
                         showSuccessParticle(eggEntity.location)
                         eggEntity.setCanPlayerPickup(true)
-                        HintModule.achieve(player, Hint.SUCCEEDED_TO_CATCH_MOB)
                         val dex = PlayerStore.open(player.uniqueId).getStringList(MobBallModule.PS_KEY_DEX)
                         val type = target.type.toString()
                         if (!dex.contains(type)) {
@@ -170,11 +159,10 @@ class MobBallHandler : Listener {
                             player.sendMessage("残念！ボールから出てきてしまった…。")
                             eggEntity.remove()
                         }
-                        HintModule.achieve(player, Hint.FAILED_TO_CATCH_MOB)
                     }
                 }
             }
-        }.runTaskTimer(XCorePlugin.instance, 0, 1L)
+        }.runTaskTimer(TCCorePlugin.instance, 0, 1L)
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -206,7 +194,7 @@ class MobBallHandler : Listener {
             NBTEntity(it).mergeCompound(entityTag)
             it.teleport(block.location.add(e.blockFace.direction))
             it.world.playSound(it.location, SOUND_RELEASE, SoundCategory.PLAYERS, 1f, 1f)
-            it.persistentDataContainer.set(NamespacedKey(XCorePlugin.instance, "isCaptured"), PersistentDataType.INTEGER, 1)
+            it.persistentDataContainer.set(NamespacedKey(TCCorePlugin.instance, "isCaptured"), PersistentDataType.INTEGER, 1)
             showTeleportParticle(it.location)
             // もしTameableなら、出した人を親とする
             if (it is Tameable) {
@@ -252,16 +240,6 @@ class MobBallHandler : Listener {
         if (!nbt.hasKey("mobCase")) return
         // ディスペンサーでのモブケースの使用を禁止する
         e.isCancelled = true
-    }
-
-    @EventHandler
-    fun onPickupMobBall(e: EntityPickupItemEvent) {
-        val player = e.entity
-        if (player !is Player) return
-        val item = e.item.itemStack
-        if (MobBallModule.isMobBall(item)) {
-            HintModule.achieve(player, Hint.GET_BALL)
-        }
     }
 
     private fun restoreMob(target: Mob, spawnEgg: ItemStack): NBTItem {

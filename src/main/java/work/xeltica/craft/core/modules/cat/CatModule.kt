@@ -8,8 +8,6 @@ import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.SoundPitch
-import work.xeltica.craft.core.modules.hint.Hint
-import work.xeltica.craft.core.modules.hint.HintModule
 
 /**
  * チャットのテキストをネコ語に置き換える、ネコモードを提供するモジュールです。
@@ -53,7 +51,6 @@ object CatModule : ModuleBase() {
         if (value) {
             Gui.getInstance().playSound(player, Sound.ENTITY_CAT_AMBIENT, 2f, SoundPitch.F_2)
             player.sendMessage("CATモードを${ChatColor.GREEN}オン${ChatColor.RESET}にしました。")
-            HintModule.achieve(player, Hint.CAT_MODE)
         } else {
             Gui.getInstance().playSound(player, Sound.ENTITY_CAT_AMBIENT, 2f, SoundPitch.F_0)
             player.sendMessage("CATモードを${ChatColor.RED}オフ${ChatColor.RESET}にしました。")

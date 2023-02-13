@@ -69,10 +69,6 @@ dependencies {
     compileOnly("org.geysermc.floodgate:api:2.0-SNAPSHOT")
     compileOnly("de.tr7zw:item-nbt-api-plugin:2.11.1")
     compileOnly("com.discordsrv:discordsrv:1.25.1")
-    compileOnly("com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.0")
-    compileOnly("com.github.koca2000:NoteBlockAPI:1.6.1")
-    compileOnly("net.citizensnpcs:citizensapi:2.0.29-SNAPSHOT")
-    compileOnly("com.github.ucchyocean.lc:LunaChat:3.0.16")
     implementation("net.wesjd:anvilgui:1.6.3-SNAPSHOT")
 
     library("com.google.code.gson", "gson", "2.8.7")
@@ -80,138 +76,41 @@ dependencies {
 }
 
 group = "work.xeltica.craft.core"
-version = "3.2.0"
-description = "A Core System Plugin for XelticaMC."
+version = "3.2.0-tc"
+description = "A Core System Plugin for TadoCraft."
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 bukkit {
-    name = "XCore"
-    main = "work.xeltica.craft.core.XCorePlugin"
+    name = "TC-Core"
+    main = "work.xeltica.craft.core.TCCorePlugin"
     version = getVersion().toString()
     apiVersion = "1.19"
-    softDepend = listOf("SkinsRestorer", "Citizens")
-    depend = listOf("kotlin-stdlib", "Geyser-Spigot", "Vault", "floodgate", "DiscordSRV", "HolographicDisplays", "NoteBlockAPI")
+    depend = listOf("kotlin-stdlib", "Geyser-Spigot", "floodgate", "DiscordSRV")
 
     commands {
         register("omikuji") {
             description = "おみくじを引きます。マイクラ内で1日に1回まで引けて、100エビパワーを消費します。"
             usage = "/omikuji"
         }
-        register("respawn") {
-            description = "メインワールドの初期スポーンに戻ります。"
-            usage = "/respawn"
-        }
-        register("pvp") {
-            description = "現在のワールドのPvP設定を変更します。"
-            usage = "/pvp <on/off>"
-            permission = "otanoshimi.command.pvp"
-        }
         register("signedit") {
             description = "看板の指定行を編集します。"
             usage = "/signedit <行番号> <テキスト>"
             permission = "otanoshimi.command.signedit"
-        }
-        register("givecustomitem") {
-            description = "XelticaMCオリジナルアイテムを授与します。"
-            usage = "/givecustomitem <playerName> <item_key>"
-            permission = "otanoshimi.command.givecustomitem"
         }
         register("givemobball") {
             description = "モブボールを入手します。。"
             usage = "/givemobball <playerName> [amount=1] [type:normal|super|ultra]"
             permission = "otanoshimi.command.givemobball"
         }
-        register("report") {
-            description = "処罰GUIを表示します。"
-            usage = "/report <playerName>"
-            permission = "otanoshimi.command.report"
-        }
-        register("localtime") {
-            description = "現在いるワールドの時間を設定します。"
-            usage = "/localtime <add|set|query> [day|night|noon|midnight|sunrise|sunset|(数値)]"
-            permission = "otanoshimi.command.localtime"
-        }
-        register("boat") {
-            description = "ボートを召喚します。"
-            usage = "/boat"
-            permission = "otanoshimi.command.boat"
-        }
-        register("cart") {
-            description = "トロッコを召喚します。"
-            usage = "/cart"
-            permission = "otanoshimi.command.cart"
-        }
-        register("promo") {
-            description = "市民への昇格方法を確認します。"
-            usage = "/promo"
-            permission = "otanoshimi.command.promo"
-        }
         register("cat") {
             description = "CATモードの有効/無効を切り替えるか、現在のモードを取得します。"
             usage = "/cat [on/off]"
             permission = "otanoshimi.command.cat"
         }
-        register("hub") {
-            description = "ロビーに移動します。"
-            usage = "/hub help"
-        }
-        register("xtp") {
-            description = "保存された過去位置を用いてテレポートします。"
-            usage = "/xtp <world> [player]"
-            permission = "otanoshimi.command.xtp"
-            aliases = listOf("xteleport")
-        }
-        register("xtpreset") {
-            description = "xtpコマンドで用いる過去位置をリセットします。プレイヤーを省略した場合、全員分をリセットします。"
-            usage = "/xtpreset <world> [player]"
-            permission = "otanoshimi.command.xtpreset"
-            aliases = listOf("xteleportreset")
-        }
-        register("xphone") {
-            description = "X Phoneメニューを開くか、アイテム「X Phone」をもらう"
-            usage = "/xphone [get]"
-            permission = "otanoshimi.command.xphone"
-            aliases = listOf("phone", "p")
-        }
-        register("live") {
-            description = "ライブ配信モードを切り替える"
-            usage = "/live <on/off>"
-            permission = "otanoshimi.command.live"
-        }
-        register("epshop") {
-            description = "エビパワーストアを開きます。"
-            usage = "/epshop"
-            permission = "otanoshimi.command.epshop"
-        }
-        register("hint") {
-            description = "ヒントメニューを開きます。"
-            usage = "/hint [hint-id]"
-            permission = "otanoshimi.command.hint"
-        }
-        register("counter") {
-            description = "カウンター管理"
-            usage = "/counter <register/unregister/cancel/bind/info/list/resetdaily>"
-            permission = "otanoshimi.command.counter"
-        }
-        register("ranking") {
-            description = "ランキング管理"
-            usage = "/ranking <create/delete/query/list/set/unset/hologram>"
-            permission = "otanoshimi.command.ranking"
-        }
         register("countdown") {
             description = "カウントダウンを表示します。"
             usage = "/countdown <秒数> [プレイヤー名...]"
             permission = "otanoshimi.command.countdown"
-        }
-        register("qchat") {
-            description = "QuickChatの設定"
-            usage = "/qchat <register/unregister/list>"
-            permission = "otanoshimi.command.qchat"
-        }
-        register("epeffectshop") {
-            description = "エビパワードラッグストアを開きます。"
-            usage = "/epeffectshop"
-            permission = "otanoshimi.command.epeffectshop"
         }
         register("xreload") {
             description = "X-Coreの設定をリロードします。"

@@ -2,7 +2,7 @@ package work.xeltica.craft.core.api
 
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.scheduler.BukkitRunnable
-import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.TCCorePlugin
 import work.xeltica.craft.core.utils.Ticks
 import java.io.File
 import java.io.IOException
@@ -31,7 +31,7 @@ class Config constructor(val configName: String, private val onReloaded: Consume
                         save()
                     }
                 }.run {
-                    runTaskTimer(XCorePlugin.instance, 0L, Ticks.from(5.0).toLong())
+                    runTaskTimer(TCCorePlugin.instance, 0L, Ticks.from(5.0).toLong())
                     autoSaveWorker = this
                 }
             } else {
@@ -65,7 +65,7 @@ class Config constructor(val configName: String, private val onReloaded: Consume
         }
 
         private fun openFile(configName: String): File {
-            val folder = XCorePlugin.instance.dataFolder
+            val folder = TCCorePlugin.instance.dataFolder
             return File(folder, "$configName.yml")
         }
     }

@@ -24,15 +24,15 @@ import org.bukkit.event.player.AsyncPlayerChatEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BookMeta
+import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.scheduler.BukkitRunnable
 import org.geysermc.cumulus.CustomForm
 import org.geysermc.cumulus.SimpleForm
-import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.TCCorePlugin
 import work.xeltica.craft.core.api.commands.CommandRegistry
 import work.xeltica.craft.core.hooks.FloodgateHook
 import work.xeltica.craft.core.hooks.FloodgateHook.isFloodgatePlayer
 import work.xeltica.craft.core.hooks.FloodgateHook.toFloodgatePlayer
-import work.xeltica.craft.core.modules.item.ItemModule
 import java.util.ArrayDeque
 import java.util.UUID
 import java.util.function.Consumer
@@ -55,7 +55,7 @@ class Gui : Listener {
         fun onEnable() {
             instance = Gui()
             CommandRegistry.register("__core_gui_event__", CommandXCoreGuiEvent())
-            Bukkit.getPluginManager().registerEvents(instance, XCorePlugin.instance)
+            Bukkit.getPluginManager().registerEvents(instance, TCCorePlugin.instance)
         }
 
         private const val NEW_PAGE_CODE = "_NEW_PAGE_"
@@ -161,7 +161,7 @@ class Gui : Listener {
             stream = stream.filter(filter)
         }
         val list = stream.map { p ->
-            val head = ItemModule.getPlayerHead(p)
+            val head = getPlayerHead(p)
             val name = PlainTextComponentSerializer.plainText().serialize(p.displayName())
             return@map MenuItem(name, {
                 onSelect?.accept(p)
@@ -257,7 +257,7 @@ class Gui : Listener {
         }
 
         Bukkit.getScheduler().runTaskLater(
-            XCorePlugin.instance,
+            TCCorePlugin.instance,
             Runnable { playSound(player, sound, volume, pitch) }, delay.toLong()
         )
     }
@@ -272,9 +272,22 @@ class Gui : Listener {
      */
     fun playSoundLocallyAfter(player: Player, sound: Sound, volume: Float, pitch: SoundPitch, delay: Int) {
         Bukkit.getScheduler().runTaskLater(
-            XCorePlugin.instance,
+            TCCorePlugin.instance,
             Runnable { playSoundLocally(player, sound, volume, pitch) }, delay.toLong()
         )
+    }
+
+    /**
+     * 指定したプレイヤーの頭を取得します。
+     */
+    fun getPlayerHead(player: Player): ItemStack {
+        val stack = ItemStack(Material.PLAYER_HEAD)
+        stack.editMeta {
+            if (it is SkullMeta) {
+                resolvePlayerHeadWithBukkit(player, it)
+            }
+        }
+        return stack
     }
 
     /**
@@ -320,7 +333,7 @@ class Gui : Listener {
             chatHandlersMap.remove(e.player)
             object : BukkitRunnable() {
                 override fun run() = handler.accept(e.message)
-            }.runTask(XCorePlugin.instance)
+            }.runTask(TCCorePlugin.instance)
         }
     }
 
@@ -428,7 +441,7 @@ class Gui : Listener {
         AnvilGUI.Builder().title(title).onComplete { _, text ->
             responseHandler?.accept(text)
             return@onComplete AnvilGUI.Response.close()
-        }.itemLeft(ItemStack(Material.GRAY_STAINED_GLASS_PANE)).plugin(XCorePlugin.instance).open(player)
+        }.itemLeft(ItemStack(Material.GRAY_STAINED_GLASS_PANE)).plugin(TCCorePlugin.instance).open(player)
     }
 
     private fun openTextInputJavaImplChat(player: Player, title: String, responseHandler: Consumer<String>?) {
@@ -449,6 +462,13 @@ class Gui : Listener {
                 responseHandler?.accept(form.parseResponse(res).getInput(0) ?: "")
             }
         fPlayer.sendForm(form)
+    }
+
+    /**
+     * Bukkit APIを用いてプレイヤーの頭情報を解決します。
+     */
+    private fun resolvePlayerHeadWithBukkit(player: Player, meta: SkullMeta) {
+        meta.playerProfile = player.playerProfile
     }
 
     data class HandlerTuple(val handler: Consumer<DialogEventArgs>, val eventArgs: DialogEventArgs, val meta: BookMeta)

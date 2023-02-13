@@ -2,8 +2,6 @@ package work.xeltica.craft.core.modules.autoCrafter
 
 import org.bukkit.Bukkit
 import org.bukkit.Location
-import org.bukkit.Sound
-import org.bukkit.SoundCategory
 import org.bukkit.block.Block
 import org.bukkit.block.Dispenser
 import org.bukkit.block.data.Directional
@@ -13,7 +11,6 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.ShapedRecipe
 import org.bukkit.inventory.ShapelessRecipe
 import work.xeltica.craft.core.api.ModuleBase
-import work.xeltica.craft.core.modules.item.ItemModule.isCustomItem
 import work.xeltica.craft.core.utils.CollectionHelper.sum
 
 /**
@@ -68,11 +65,6 @@ object AutoCrafterModule : ModuleBase() {
         val blockData = dispenser.blockData
         val inventory = dispenser.inventory
         val contents = inventory.contents.filterNotNull()
-
-        if (contents.any { it.isCustomItem() }) {
-            dispenser.world.playSound(dispenser.location, Sound.BLOCK_DISPENSER_FAIL, SoundCategory.BLOCKS, 1f, 1f)
-            return
-        }
 
         for (recipe in recipes) {
             val fixedInventory = contents.groupingBy { it.type }.sum { it.amount }.toMutableMap()
