@@ -23,6 +23,7 @@ import work.xeltica.craft.core.modules.kusa.KusaModule
 import work.xeltica.craft.core.modules.mobball.MobBallModule
 import work.xeltica.craft.core.modules.motd.MotdModule
 import work.xeltica.craft.core.modules.omikuji.OmikujiModule
+import work.xeltica.craft.core.modules.onegiKitchen.OnegiKitchenModule
 import work.xeltica.craft.core.modules.signEdit.SignEditModule
 import work.xeltica.craft.core.utils.Ticks
 
@@ -158,6 +159,7 @@ class TCCorePlugin : JavaPlugin() {
         MotdModule,
         OmikujiModule,
         SignEditModule,
+        OnegiKitchenModule,
     )
 
     companion object {
