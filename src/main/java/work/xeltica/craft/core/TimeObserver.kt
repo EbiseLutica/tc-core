@@ -14,7 +14,7 @@ import java.time.LocalDateTime
 class TimeObserver : BukkitRunnable() {
     override fun run() {
         val pm = Bukkit.getPluginManager()
-        val currentGameTime = Bukkit.getWorld("main")!!.time
+        val currentGameTime = Bukkit.getWorld("world")!!.time
         val currentRealTime = LocalDateTime.now()
 
         // 時間が前よりも小さくなったのであれば、おそらく日をまたいだことになる
