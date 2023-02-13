@@ -85,7 +85,7 @@ bukkit {
     main = "work.xeltica.craft.core.TCCorePlugin"
     version = getVersion().toString()
     apiVersion = "1.19"
-    depend = listOf("kotlin-stdlib", "Geyser-Spigot", "floodgate", "DiscordSRV")
+    depend = listOf("Geyser-Spigot", "floodgate", "DiscordSRV")
 
     commands {
         register("omikuji") {
@@ -121,26 +121,6 @@ bukkit {
             description = "X-Core Debug Command"
             usage = "/xdebug"
             permission = "otanoshimi.command.xdebug"
-        }
-        register("stamp") {
-            description = "スタンプラリー用コマンド"
-            usage = "/stamp listDonePlayers"
-            permission = "otanoshimi.command.stamp"
-        }
-        register("firework") {
-            description = "花火大会用コマンド"
-            usage = "/firework <run|center> <scriptName>"
-            permission = "otanoshimi.command.firework"
-        }
-        register("farmfest") {
-            description = "秋農業祭り用コマンド"
-            usage = "/farmfest <clearFarm|add|init|start|stop>"
-            permission = "otanoshimi.command.farmfest"
-        }
-        register("candystore") {
-            description = "アメストアを開きます。"
-            usage = "/candystore"
-            permission = "otanoshimi.command.candystore"
         }
         register("__core_gui_event__") {
             description = "?"
